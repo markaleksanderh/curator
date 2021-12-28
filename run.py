@@ -22,8 +22,11 @@ access_token = get_access_token()
 headers = {
     'Authorization': 'Bearer {token}'.format(token=access_token)
 }
-# r = requests.get(BASE_URL + 'audio-features/' + track_id, headers=headers)
 
+# Return artist ID
+def get_artist_id():
+    artist_id = '1bwUhKRmEkOZ1wuTnV9XjC'
+    return artist_id
 
 # Get related artists
 def get_related_artists(artist_id):
@@ -31,9 +34,32 @@ def get_related_artists(artist_id):
     related_artist_ids = [artist['id'] for artist in related_artists['artists']]
     return related_artist_ids
 
-print(get_related_artists('1bwUhKRmEkOZ1wuTnV9XjC'))
+print(get_related_artists(get_artist_id()))
 
+
+# TODO resolve HTTP 400 error "missing country parameter"
 # Get artist top track
-def get_artist_top_track():
+def get_artist_top_track(artist_id):
+    # GET /v1/artists/id/top-tracks HTTP/1.1
+    top_track = requests.get(base_url + 'artists/' + artist_id + '/top-tracks', headers=headers).json()
+    return top_track
+
+# print(get_artist_top_track('6Nii4K84ZzBZS8X2MP8c9t'))
+
+# Iterate through list of related artists and return top track of each
+def get_all_top_tracks(related_artists):
     pass
 
+
+# Create playlist and return playlist ID
+# TODO Authorization flow
+def create_playlist():
+    # /v1/users/user_id/playlists HTTP/1.1
+    # new_playlist = requests.post(base_url + 'users/' + config['SPOTIFY_USER_ID'] + '/playlists', headers=headers
+    # )   
+    # return new_playlist.json()
+    pass
+
+
+def add_playlist_tracks(playlist_id):
+    pass
