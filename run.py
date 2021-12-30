@@ -34,17 +34,17 @@ def get_related_artists(artist_id):
     related_artist_ids = [artist['id'] for artist in related_artists['artists']]
     return related_artist_ids
 
-print(get_related_artists(get_artist_id()))
+# print(get_related_artists(get_artist_id()))
 
 
-# TODO resolve HTTP 400 error "missing country parameter"
+# TODO get location of Spotify user for market parameter
 # Get artist top track
 def get_artist_top_track(artist_id):
-    # GET /v1/artists/id/top-tracks HTTP/1.1
-    top_track = requests.get(base_url + 'artists/' + artist_id + '/top-tracks', headers=headers).json()
+    params = {'market': 'GB'}
+    top_track = requests.get(base_url + 'artists/' + artist_id + '/top-tracks', params=params, headers=headers).json()
     return top_track
 
-# print(get_artist_top_track('6Nii4K84ZzBZS8X2MP8c9t'))
+print(get_artist_top_track('6Nii4K84ZzBZS8X2MP8c9t'))
 
 # Iterate through list of related artists and return top track of each
 def get_all_top_tracks(related_artists):

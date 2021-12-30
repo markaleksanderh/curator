@@ -13,3 +13,4 @@
 - Ignore artist
 - Replace artist
 - Choose multiple artists
+- Get Spotify account market for market parameter in artist top tracks
