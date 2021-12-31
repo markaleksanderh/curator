@@ -47,8 +47,11 @@ def get_artist_top_track(artist_id):
 print(get_artist_top_track('6Nii4K84ZzBZS8X2MP8c9t'))
 
 # Iterate through list of related artists and return top track of each
+# TODO use asyncio or threading to return top tracks asynchronously
 def get_all_top_tracks(related_artists):
-    pass
+    top_tracks = []
+    return top_tracks
+
 
 
 # Create playlist and return playlist ID
