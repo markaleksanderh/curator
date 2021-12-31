@@ -1,10 +1,14 @@
-from flask import Flask, render_template
+from flask import (
+    Flask,
+    render_template,
+    make_response,
+    redirect
+)
+
 from flask_cors import CORS
 import requests
 import os
-
-# from dotenv import dotenv_values
-# config = dotenv_values(".env")
+from urllib.parse import urlencode
 
 auth_url = 'https://accounts.spotify.com/api/token'
 
@@ -16,9 +20,18 @@ def create_app():
     def index():
         return render_template('index.html')
 
-
     @app.route('/login')
     def login():
+        payload = {
+            'client_id': os.environ['CLIENT_ID'],
+            'response_type': 'code',
+            'redirect_uri': os.environ['REDIRECT_URI'],
+            'scope': 'user-read-private user-read-email',
+        }
+        res = make_response(redirect('{}/?{}'.format(auth_url, urlencode(payload))))
+        return res
+
+    def logout():
         pass
 
     @app.route('/callback')
@@ -28,17 +41,6 @@ def create_app():
     @app.route('/refresh_token')
     def refresh_token():
         pass    
-
-    # @app.route('/authenticate')
-    # def get_access_token():
-    #     auth_response = requests.post(auth_url, {
-    #         'grant_type': 'client_credentials',
-    #         'client_id' : os.environ['CLIENT_ID'],
-    #         'client_secret': os.environ['CLIENT_SECRET']            
-    #     })
-    #     auth_response_data = auth_response.json()
-    #     access_token = auth_response_data['access_token']
-    #     return access_token
 
     @app.errorhandler(404)
     def page_not_found(error):
