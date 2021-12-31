@@ -16,16 +16,29 @@ def create_app():
     def index():
         return render_template('index.html')
 
-    @app.route('/authenticate')
-    def get_access_token():
-        auth_response = requests.post(auth_url, {
-            'grant_type': 'client_credentials',
-            'client_id' : os.environ['CLIENT_ID'],
-            'client_secret': os.environ['CLIENT_SECRET']            
-        })
-        auth_response_data = auth_response.json()
-        access_token = auth_response_data['access_token']
-        return access_token
+
+    @app.route('/login')
+    def login():
+        pass
+
+    @app.route('/callback')
+    def callback():
+        pass
+
+    @app.route('/refresh_token')
+    def refresh_token():
+        pass    
+
+    # @app.route('/authenticate')
+    # def get_access_token():
+    #     auth_response = requests.post(auth_url, {
+    #         'grant_type': 'client_credentials',
+    #         'client_id' : os.environ['CLIENT_ID'],
+    #         'client_secret': os.environ['CLIENT_SECRET']            
+    #     })
+    #     auth_response_data = auth_response.json()
+    #     access_token = auth_response_data['access_token']
+    #     return access_token
 
     @app.errorhandler(404)
     def page_not_found(error):
