@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_cors import CORS
 import requests
 import os
@@ -14,7 +14,7 @@ def create_app():
 
     @app.route('/')
     def index():
-        return "Spotify playlist curator"
+        return render_template('index.html')
 
     @app.route('/authenticate')
     def get_access_token():
