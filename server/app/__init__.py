@@ -12,8 +12,12 @@ def create_app():
     app = Flask(__name__)
     CORS(app)
 
-    @app.route('/authenticate')
+    @app.route('/')
     def index():
+        return "Spotify playlist curator"
+
+    @app.route('/authenticate')
+    def get_access_token():
         auth_response = requests.post(auth_url, {
             'grant_type': 'client_credentials',
             'client_id' : os.environ['CLIENT_ID'],
