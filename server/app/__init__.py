@@ -72,7 +72,9 @@ def create_app():
 
     @app.route('/profile')
     def profile():
-        return render_template('profile.html')
+        headers = {'Authorization': "Bearer {}".format(session['tokens'].get('access_token'))}
+        res = requests.get(profile_url, headers=headers).json()
+        return render_template('profile.html', data=res, tokens=session.get('tokens'))
 
     @app.errorhandler(404)
     def page_not_found(error):
