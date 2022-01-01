@@ -15,7 +15,6 @@ services:
       - FLASK_ENV=development
       - FLASK_APP=run.py
       - FLASK_DEBUG=1
+      - HELLO_ENV=${HELLO_ENV}
       - CLIENT_ID=${CLIENT_ID}
       - CLIENT_SECRET=${CLIENT_SECRET}
-      - REDIRECT_URI=${REDIRECT_URI}
-      - SECRET_KEY=${SECRET_KEY}
