@@ -22,6 +22,7 @@ profile_url = 'https://api.spotify.com/v1/me'
 
 def create_app():
     app = Flask(__name__)
+    app.secret_key = os.environ['SECRET_KEY']
     CORS(app)
 
     @app.route('/')
