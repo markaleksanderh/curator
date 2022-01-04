@@ -6,6 +6,7 @@ from flask import (
     request,
     session,
     url_for,
+    jsonify,
 )
 
 import string
@@ -27,7 +28,7 @@ def create_app():
 
     @app.route('/')
     def index():
-        return render_template('index.html')
+        return jsonify({"message": "Index"})
 
     @app.route('/login', methods=['GET'])
     def login():
