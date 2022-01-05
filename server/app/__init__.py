@@ -16,6 +16,7 @@ import random
 from flask_cors import CORS
 import requests
 import os
+import json
 from urllib.parse import urlencode
 
 auth_url = 'https://accounts.spotify.com/authorize'
@@ -96,10 +97,41 @@ def create_app():
             res = requests.get(profile_url, headers=headers).json()
             return render_template('profile.html', data=res, tokens=session.get('tokens'))
 
-    @app.route('/search')
+
+    def find_artist(artist=None):
+        if artist is None:
+            return artist
+        payload = {
+            'q': artist,
+            'type': 'artist',
+            'limit': '10'
+        }
+        headers = {
+            'Authorization': "Bearer {}".format(session['tokens'].get('access_token')),
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            }
+        return requests.get(search_url, params=payload, headers=headers)
+
+
+    @app.route('/search', methods=['GET', 'POST'])
     def search():
-        # headers = {'Authorization': "Bearer {}".format(session['tokens'].get('access_token'))}
-        pass
+        if request.method == 'POST':
+            artist = request.form.get('artist')
+
+            if artist:
+                res = find_artist(artist)
+                res_data = res.json()
+
+                if res_data.get('error') or res.status_code != 200:
+                    abort(400)
+                else:
+                    return json.dumps(res_data)
+            else:
+                abort(400)
+        else:
+            return render_template('search.html')
+    
 
     @app.errorhandler(404)
     def page_not_found(error):
