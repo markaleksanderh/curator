@@ -7,6 +7,7 @@ from flask import (
     session,
     url_for,
     jsonify,
+    abort,
 )
 
 import string
@@ -88,9 +89,12 @@ def create_app():
 
     @app.route('/profile')
     def profile():
-        headers = {'Authorization': "Bearer {}".format(session['tokens'].get('access_token'))}
-        res = requests.get(profile_url, headers=headers).json()
-        return render_template('profile.html', data=res, tokens=session.get('tokens'))
+        if 'tokens' not in session:
+            return redirect(url_for('index'))
+        else:
+            headers = {'Authorization': "Bearer {}".format(session['tokens'].get('access_token'))}
+            res = requests.get(profile_url, headers=headers).json()
+            return render_template('profile.html', data=res, tokens=session.get('tokens'))
 
     @app.route('/search')
     def search():
