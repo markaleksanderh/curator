@@ -20,6 +20,7 @@ from urllib.parse import urlencode
 auth_url = 'https://accounts.spotify.com/authorize'
 token_url = 'https://accounts.spotify.com/api/token'
 profile_url = 'https://api.spotify.com/v1/me'
+search_url = 'https://api.spotify.com/v1/search'
 
 def create_app():
     app = Flask(__name__)
@@ -28,7 +29,8 @@ def create_app():
 
     @app.route('/')
     def index():
-        return jsonify({"message": "Index"})
+        return render_template('index.html')
+
 
     @app.route('/login', methods=['GET'])
     def login():
@@ -45,8 +47,21 @@ def create_app():
         res.set_cookie('spotify_auth_state', state)
         return res
 
+    @app.route('/logout')
     def logout():
-        pass
+        state = ''.join(random.choice(string.digits + string.ascii_letters) for i in range(16))
+        scope = 'user-read-private user-read-email'
+        payload = {
+            'client_id': os.environ['CLIENT_ID'],
+            'response_type': 'code',
+            'redirect_uri': 'http://localhost:5000/callback',
+            'state': state,
+            'scope': scope,
+            'show_dialog': True,
+        }
+        res = make_response(redirect('{}/?{}'.format(auth_url, urlencode(payload))))
+        res.set_cookie('spotify_auth_state', state)
+        return res
 
     @app.route('/callback')
     def callback():
@@ -77,8 +92,13 @@ def create_app():
         res = requests.get(profile_url, headers=headers).json()
         return render_template('profile.html', data=res, tokens=session.get('tokens'))
 
+    @app.route('/search')
+    def search():
+        # headers = {'Authorization': "Bearer {}".format(session['tokens'].get('access_token'))}
+        pass
+
     @app.errorhandler(404)
     def page_not_found(error):
-        return "404 Page not found"
+        return jsonify({"message": "404 Page not found"})
 
     return app

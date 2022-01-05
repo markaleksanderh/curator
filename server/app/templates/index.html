@@ -1,9 +1,5 @@
-<html>
-    <head>
-        <title>Playlist Curator</title>
-    </head>
-    <body>
-        <h1>Playlist Curator</h1>
-        <a href="/login">Login</a>
-    </body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+    <a href="{{ url_for('login') }}">Login</a>
+{% endblock %}
